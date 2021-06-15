@@ -3,11 +3,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using System.IO;
 
 public class MainmenuScript : MonoBehaviour
 {
-    public Text txx;
+    public Button ButtonQuit;
+    public Button QuitButtonCancel;
+    public Button QuitButtonConfirm;
+    public Text TextButtonQuit;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,13 +24,18 @@ public class MainmenuScript : MonoBehaviour
         
     }
 
-    public void ChangeText()
+    public void ButtonQuitPressed()
     {
-        txx.text = "Privet";
+        TextButtonQuit.text = "Sure?";
     }
 
-    public void quitGame()
+    public void ConfirmButtonQuit()
     {
         Application.Quit();
+    }
+
+    public void CancelButtonQuit()
+    {
+        TextButtonQuit.text = "Quit";
     }
 }

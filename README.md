@@ -320,3 +320,174 @@ public class CodeMenu : MonoBehaviour
     }
 }
 ```
+
+Головне меню `C#`:
+
+```C#
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using System.IO;
+
+public class MainmenuScript : MonoBehaviour
+{
+    public Button ButtonQuit;
+    public Button QuitButtonCancel;
+    public Button QuitButtonConfirm;
+    public Text TextButtonQuit;
+
+    public void ButtonQuitPressed()
+    {
+        TextButtonQuit.text = "Sure?";
+    }
+
+    public void ConfirmButtonQuit()
+    {
+        Application.Quit();
+    }
+
+    public void CancelButtonQuit()
+    {
+        TextButtonQuit.text = "Quit";
+    }
+}
+```
+
+Меню, яке відповідає за завдання `C#`:
+
+```C#
+public class QuestMenu : MonoBehaviour
+{
+    public Text QuestNumberText;
+    public Text QuestText;
+    public Text QuestTextComplete;
+    public QUESTLIST quest;
+
+    // Update is called once per frame
+    void Update()
+    {
+        QuestText.text = quest.GETQUEST(Convert.ToInt32(QuestNumberText.text) - 1);
+        QuestTextComplete.text = quest.GETQUESTCOMPLETE(Convert.ToInt32(QuestNumberText.text) - 1);
+        if (QuestTextComplete.text == "Complete")
+            QuestTextComplete.color = Color.green;
+        else if (QuestTextComplete.text == "Uncompleted")
+            QuestTextComplete.color = Color.red;
+    }
+
+    public void RightButton()
+    {
+        if (QuestNumberText.text != "10")
+        {
+            QuestNumberText.text = "" + (Convert.ToInt32(QuestNumberText.text) + 1);
+            QuestText.text = quest.GETQUEST(Convert.ToInt32(QuestNumberText.text)-1);
+            QuestTextComplete.text = quest.GETQUESTCOMPLETE(Convert.ToInt32(QuestNumberText.text)-1);
+        }
+    }
+
+    public void LeftButton()
+    {
+        if (Convert.ToInt32(QuestNumberText.text) > 1)
+        {
+            QuestNumberText.text = "" + (Convert.ToInt32(QuestNumberText.text) - 1);
+            QuestText.text = quest.GETQUEST(Convert.ToInt32(QuestNumberText.text) - 1);
+            QuestTextComplete.text = quest.GETQUESTCOMPLETE(Convert.ToInt32(QuestNumberText.text) - 1);
+        }    
+    }
+
+    public void MoveComplete()
+    {
+        quest.SETQUESTCOMPLETE(0);
+        if (QuestNumberText.text == "1")
+        {
+            QuestTextComplete.text = quest.GETQUESTCOMPLETE(Convert.ToInt32(QuestNumberText.text) - 1);
+        }
+    }
+
+    public void RightRotateComplete()
+    {
+        quest.SETQUESTCOMPLETE(1);
+    }
+
+    public void LeftRotateComplete()
+    {
+        quest.SETQUESTCOMPLETE(2);
+    }
+
+    public void RepeatComplete()
+    {
+        quest.SETQUESTCOMPLETE(3);
+    }
+}
+
+```
+
+Код, який генерує лист завдань `C#`:
+
+```C#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class QUESTLIST : MonoBehaviour
+{
+    private string[,] quest = new string[10, 2];
+    // Start is called before the first frame update
+    void Start()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            quest[i, 1] = "Uncompleted";
+        }
+        quest[0, 0] = "Make simple movement";
+        quest[1, 0] = "Make simple rotation left";
+        quest[2, 0] = "Make simple rotation right";
+        quest[3, 0] = "Use repeat";
+    }
+
+    public string GETQUEST(int number)
+    {
+        return quest[number, 0];
+    }
+
+    public string GETQUESTCOMPLETE(int number)
+    {
+        return quest[number, 1];
+    }
+
+    public void SETQUESTCOMPLETE(int number)
+    {
+        quest[number, 1] = "Complete";
+    }
+}
+
+```
+
+Меню, за налаштуванням відео `C#`:
+
+```C#
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class VideoMenu : MonoBehaviour
+{
+    public Scrollbar scrollbar;
+    public Text FOVtext;
+    public Camera VRcam;
+    public Camera Testcam;
+
+    public void TextWithFOV()
+    {
+        FOVtext.text = "" + Convert.ToInt32((60 + (scrollbar.value * 30)));
+        FOVtext.text = "" + FOVtext.text[0] + FOVtext.text[1];
+        VRcam.fieldOfView = 60 + (scrollbar.value * 30);
+        Testcam.fieldOfView = 60 + (scrollbar.value * 30);
+    }
+}
+
+```

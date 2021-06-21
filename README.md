@@ -15,300 +15,308 @@
 
 ## Код
 
-Если нужно выделить слово или фразу внутри строки, то используются одинарные обратные кавычки (`):
 
-    Это `слово` будет выделено
-
-Для выделения в блоки - тройные:
-
-    ```
-        Здесь может быть
-        Ваша реклама
-    ```
-
-Дополнительно можно задавать язык кода внутри блока, указав его после первых трех кавычек:
-
-    ```html
-        <input type="text">
-    ```
-
-    ```css
-        body {
-            margin: 0;
-            padding: 0;
-        }
-    ```
-
-    ```php
-        <?php phpinfo();?>
-    ```
-
-Пример блока для `C#`:
+Меню для створення блоків, та редагування їх позиції `C#`:
 
 ```C#
-using MarkdownSharp;
-using MarkdownSharp.Extensions.Mal;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
 
-Markdown mark = new Markdown();
+public class CodeMenu : MonoBehaviour
+{
+    public Text MoveText;
+    public Text RotateRightText;
+    public Text RotateLeftText;
+    public Text RepeatText;
+    public Text ValueText;
+    public Button MoveButton;
+    public Button RotateRightButton;
+    public Button RotateLeftButton;
+    public Button RepeatButton;
+    public GameObject prefab;
+    public RectTransform content;
+    public GameObject cube;
+    public Dropdown coordinatesdropdown;
+    public Vector3 direction;
+    public QUESTLIST quest;
 
-// Short link for MAL - 
-// http://myanimelist.net/people/413/Kitamura_Eri => mal://Kitamura_Eri
-mark.AddExtension(new Articles()); 
-mark.AddExtension(new Profile());
+    // Start is called before the first frame update
+    void Start()
+    {
+        MoveButton.enabled = false;
+        RotateLeftButton.enabled = false;
+        RotateRightButton.enabled = false;
+        RepeatButton.enabled = false;
+    }
 
-mark.Transform(text);
-```
-
-Пример блока для `Python`:
-```Python
-from timeit import Timer
-
-tmp = "Python 3.2.2 (default, Jun 12 2011, 15:08:59) [MSC v.1500 32 bit (Intel)] on win32."
-
-def case1(): # А. инкрементальные конкатенации в цикле
-    s = ""
-    for i in range(10000):
-        s += tmp
-
-def case2(): # Б. через промежуточный список и метод join
-    s = []
-    for i in range(10000):
-        s.append(tmp)
-    s = "".join(s)
-
-def case3(): # В. списковое выражение и метод join
-    return "".join([tmp for i in range(10000)])
-
-def case4(): # Г. генераторное выражение и метод join
-    return "".join(tmp for i in range(10000))
-
-for v in range(1,5):
-    print (Timer("func()","from __main__ import case%s as func" % v).timeit(200))
-```
-    
-[:arrow_up:Оглавление](#Оглавление)
-___
-## Списки
-
-#### Маркированный
-Задать **маркированный** список можно несколькими символами `-`, `+` или `*`:
-```
-- Уровень списка 1. Пункт 1.
-- Уровень списка 1. Пункт 2.
-- Уровень списка 1. Пункт 3.
-```
-- Уровень списка 1. Пункт 1.
-- Уровень списка 1. Пункт 2.
-- Уровень списка 1. Пункт 3.
-
-```
-+ Уровень списка 1. Пункт 1.
-+ Уровень списка 1. Пункт 2.
-+ Уровень списка 1. Пункт 3.
-```
-+ Уровень списка 1. Пункт 1.
-+ Уровень списка 1. Пункт 2.
-+ Уровень списка 1. Пункт 3.
-
-```
-* Уровень списка 1. Пункт 1.
-* Уровень списка 1. Пункт 2.
-* Уровень списка 1. Пункт 3.
-```
-* Уровень списка 1. Пункт 1.
-* Уровень списка 1. Пункт 2.
-* Уровень списка 1. Пункт 3.
-
-Можно создавать многоуровневые списки. Каждый уровень отделяется **четырьмя** (4) пробелами:
-```
-- Уровень списка 1. Пункт 1.
-    - Уровень списка 2. Пункт 1.
-- Уровень списка 1. Пункт 2.
-    - Уровень списка 2. Пункт 1.
-    - Уровень списка 2. Пункт 2.
-- Уровень списка 1. Пункт 3.
-    - Уровень списка 2. Пункт 1.
-        - Уровень списка 3. Пункт 1.
-        - Уровень списка 3. Пункт 2.
-           - Уровень списка 4. Пункт 1.
-```
-- Уровень списка 1. Пункт 1.
-  - Уровень списка 2. Пункт 1.
-- Уровень списка 1. Пункт 2.
-    - Уровень списка 2. Пункт 1.
-    - Уровень списка 2. Пункт 2.
-- Уровень списка 1. Пункт 3.
-    - Уровень списка 2. Пункт 1.
-      - Уровень списка 3. Пункт 1.
-      - Уровень списка 3. Пункт 2.
-         - Уровень списка 4. Пункт 1.
-
-Каждый уровень отделяется двумя пробелами.
-
-#### Нумерованный
-Для Githib работа с нумерованными списками выглядит очень интересно. Каждый уровень отделяется **четырьмя** (4) пробелами:
-```
-1. Первый уровень 1
-    1. Второй уровень 1
-        1. Третий уровень 1
-            1. Четвертый уровень 1
-                1. Пятый уровень 1
-                    1. Шестой уровень
-                        1. Седьмой уровень
-                            1. Седьмой уровень
-2. Первый уровень 2
-2. Первый уровень (должно быть 3)
-4. Первый уровень 4
-```
-1. Первый уровень 1
-    1. Второй уровень 1
-        1. Третий уровень 1
-            1. Четвертый уровень 1
-                1. Пятый уровень 1
-                    1. Шестой уровень
-                        1. Седьмой уровень
-                            1. Седьмой уровень
-2. Первый уровень 2
-2. Первый уровень (должно быть 3)
-4. Первый уровень 4
-
-#### Смешанные списки
-При использовании смешанных списков нужно очень внимательно следить за нумерацией. Лучше, как и в нумерованных, использовать четыре (4) пробела для отделения уровня.
-```
-1. Первый уровень "нумерованный" - 1
-    * Второй уровень "маркер"
-        + Третий уровень "маркер"
-        - Третий уровень "маркер"
-        1. Третий уровень "нумерованный" - 1
-            1. Четвертый уровень "нумерованный" - 1
-                1. Пятый уровень "нумерованный" - 1
-                    1. Шестой уровень "нумерованный" - 1
-                        1. Седьмой уровень "нумерованный" - 1
-                        * Седьмой уровень "маркер"
-                        2. Седьмой уровень "нумерованный" - 1 (нарушена нумерация, новая нумерация 1)
-                        3. Седьмой уровень "нумерованный" - 1 (нарушена нумерация, новая нумерация 2)
-                            1. Восьмой уровень "нумерованный" - 1
-2. Первый уровень "нумерованный" - 2
-- Первый уровень "нумерованный" - 3
-4. Первый уровень "нумерованный" - 4 (нарушена нумерация, новая нумерация 1)
-5. Первый уровень "нумерованный" - 5 (нарушена нумерация, новая нумерация 2)
-```
-1. Первый уровень "нумерованный" - 1
-    * Второй уровень "маркер"
-        + Третий уровень "маркер"
-        - Третий уровень "маркер"
-        1. Третий уровень "нумерованный" - 1
-            1. Четвертый уровень "нумерованный" - 1
-                1. Пятый уровень "нумерованный" - 1
-                    1. Шестой уровень "нумерованный" - 1
-                        1. Седьмой уровень "нумерованный" - 1
-                        * Седьмой уровень "маркер"
-                        2. Седьмой уровень "нумерованный" - 2
-                        3. Седьмой уровень "нумерованный" - 3
-                            1. Восьмой уровень "нумерованный" - 1
-2. Первый уровень "нумерованный" - 2
-- Первый уровень "маркерный" - 3
-4. Первый уровень "нумерованный" - 4 (хотя по идее должен быть 3)
-5. Первый уровень "нумерованный" - 5 (хотя, по идее должен быть 3)
-
-#### Список задач
-(Task List)
-Можно создавать "Списки задач" для этого необходимо использовать `- [ ]` для поставленной задачи и `- [X]` для выполненной задачи.
-```
-- [X] Придумать внешний вид резюме
-- [ ] Написать основные категории
-- [X] Опубликовать
-
-```
-- [X] Придумать внешний вид резюме
-- [ ] Написать основные категории
-- [X] Опубликовать
-
-Также можно создавать многоуровневые списки задач. Каждый уровень отделяется **четырьмя** (4) пробелами:
-```
-- [X] Задача 1
-    - [X] Подзадача 1 для Задачи 1
-    - [X] Подзадача 2 для Задачи 1
-- [ ] Задача 2
-    - [X] Подзадача 1 для Задачи 2
-    - [ ] Подзадача 2 для Задачи 2
-- [ ] Задача 3
-    - [ ] Подзадача 1 для Задачи 3
-        - [ ] Подзадача 1 для Подзадача 1 для Задачи 3
-```
-- [X] Задача 1
-    - [X] Подзадача 1 для Задачи 1
-    - [X] Подзадача 2 для Задачи 1
-- [ ] Задача 2
-    - [X] Подзадача 1 для Задачи 2
-    - [ ] Подзадача 2 для Задачи 2
-- [ ] Задача 3
-    - [ ] Подзадача 1 для Задачи 3
-        - [ ] Подзадача 1 для Подзадача 1 для Задачи 3
-    
-[:arrow_up:Оглавление](#Оглавление) 
-___
-## Ссылки
-Либо просто вставить ссылку, либо дополнительно задать текст ссылки (пробела между скобками быть не должно):
-```
-Первый вариант вставки ссылок - это просто написать адрес сайта http://sabaka.net
-```
-Первый вариант вставки ссылок - это просто написать адрес сайта http://sabaka.net
-
-Второй вариант записывается так: `[текст ссылки](адрес ссылки)`
-```
-[sabaka.net](http://sabaka.net)
-```
-[sabaka.net](http://sabaka.net)
-    
-[Sabaka(DOT)Net]:http://sabaka.net    
-    
-[:arrow_up:Оглавление](#Оглавление)
-____
-## Вставка изображения
-```
-![Alt-текст](https://avatars1.githubusercontent.com/u/5384215?v=3&s=460 "Орк")
-```
-![Alt-текст](https://avatars1.githubusercontent.com/u/5384215?v=3&s=460 "Орк")
-
-### Дополнительно:
-#### Вставка ссылки с картинкой на ролик с YouTube
-Описание комбинации `[![Тут текст](адрес до картинки)](ссылка на страничку YouTube)`        
-Пример:        
-```[![Тут текст](https://img.youtube.com/vi/RHPYGwVQB2o/0.jpg)](https://youtu.be/RHPYGwVQB2o)```        
-Что мы увидим:        
-[![Тут текст](https://img.youtube.com/vi/RHPYGwVQB2o/0.jpg)](https://youtu.be/RHPYGwVQB2o)        
+    // Update is called once per frame
+    void Update()
+    {
         
-[:arrow_up:Оглавление](#Оглавление) 
-____
-## Вставка таблиц
-```
-| LEFT | CENTER | RIGHT |
-|----------------|:---------:|----------------:|
-| По левому краю | По центру | По правому краю |
-| текст | текст | текст |
-```
-| LEFT | CENTER | RIGHT |
-|----------------|:---------:|----------------:|
-| По левому краю | По центру | По правому краю |
-| текст | текст | текст |
+    }
 
-**Внимание:** Если в тексте таблицы нужно использовать символ "вертикальная черта - `|`", то в место него необходимо написать замену на комбинацию HTML-кода* `&#124;`, это нужно для того, что бы таблица не потеряла ориентации.    
-*) - Можно использовать ASCII и/или UTF коды.
+    public void GenerateMove()
+    {
+        GameObject gm = Instantiate(this.prefab, this.content);
+        gm.GetComponentInChildren<Text>().text = "MOVE " + ValueText.text + " STEPS IN ";
+        if (coordinatesdropdown.value == 0)
+            gm.GetComponentInChildren<Text>().text += "X-AXIS";
+        else if (coordinatesdropdown.value == 1)
+            gm.GetComponentInChildren<Text>().text += "Y-AXIS";
+        else if (coordinatesdropdown.value == 2)
+            gm.GetComponentInChildren<Text>().text += "Z-AXIS";
+        content.GetChild(content.childCount - 1).GetChild(1).GetComponent<Text>().text = "1";
+        content.GetChild(content.childCount - 1).GetChild(2).GetComponent<Text>().text = ValueText.text;
+        content.GetChild(content.childCount - 1).GetChild(3).GetComponent<Text>().text = Convert.ToString(coordinatesdropdown.value);
+        quest.SETQUESTCOMPLETE(0);
+    }
 
-**Пример:**
+    public void GenerateRotateRight()
+    {
+        GameObject gm = Instantiate(this.prefab, this.content);
+        gm.GetComponentInChildren<Text>().text = "ROTATE " + ValueText.text + " RIGHT";
+        content.GetChild(content.childCount - 1).GetChild(1).GetComponent<Text>().text = "2";
+        content.GetChild(content.childCount - 1).GetChild(2).GetComponent<Text>().text = ValueText.text;
+        content.GetChild(content.childCount - 1).GetChild(3).GetComponent<Text>().text = Convert.ToString(coordinatesdropdown.value);
+        quest.SETQUESTCOMPLETE(1);
+    }
+
+    public void GenerateRotateLeft()
+    {
+        GameObject gm = Instantiate(this.prefab, this.content);
+        gm.GetComponentInChildren<Text>().text = "ROTATE " + ValueText.text + " LEFT";
+        content.GetChild(content.childCount - 1).GetChild(1).GetComponent<Text>().text = "3";
+        content.GetChild(content.childCount - 1).GetChild(2).GetComponent<Text>().text = ValueText.text;
+        content.GetChild(content.childCount - 1).GetChild(3).GetComponent<Text>().text = Convert.ToString(coordinatesdropdown.value);
+        quest.SETQUESTCOMPLETE(2);
+    }
+
+    public void GenerateRepeate()
+    {
+        GameObject gm = Instantiate(this.prefab, this.content);
+        gm.GetComponentInChildren<Text>().text = "REPEAT " + ValueText.text + " TIMES{";
+        content.GetChild(content.childCount - 1).GetChild(1).GetComponent<Text>().text = "4";
+        content.GetChild(content.childCount - 1).GetChild(2).GetComponent<Text>().text = ValueText.text;
+        content.GetChild(content.childCount - 1).GetChild(3).GetComponent<Text>().text = Convert.ToString(coordinatesdropdown.value);
+        quest.SETQUESTCOMPLETE(3);
+        //GenerateOpen();
+        GenerateClose();
+    }
+
+    public void GenerateClose()
+    {
+        GameObject gm = Instantiate(this.prefab, this.content);
+        gm.GetComponentInChildren<Text>().text = "}";
+        content.GetChild(content.childCount - 1).GetChild(1).GetComponent<Text>().text = "5";
+        content.GetChild(content.childCount - 1).GetChild(2).GetComponent<Text>().text = ValueText.text;
+        content.GetChild(content.childCount - 1).GetChild(3).GetComponent<Text>().text = Convert.ToString(coordinatesdropdown.value);
+    }
+
+    public void NextValue()
+    {
+        ValueText.text = "" + (Convert.ToInt32(ValueText.text)+1);
+        MoveText.text = "Move "+ ValueText.text + " steps";
+        RotateRightText.text = "Rotate "+ ValueText.text + " right";
+        RotateLeftText.text = "Rotate " + ValueText.text + " left";
+        RepeatText.text = "Repeat " + ValueText.text + " times";
+        if (Convert.ToInt32(ValueText.text) == 0)
+        {
+            MoveButton.enabled = false;
+            RotateLeftButton.enabled = false;
+            RotateRightButton.enabled = false;
+            RepeatButton.enabled = false;
+        }
+        else if (Convert.ToInt32(ValueText.text) < 0)
+        {
+            MoveButton.enabled = true;
+            RotateLeftButton.enabled = false;
+            RotateRightButton.enabled = false;
+            RepeatButton.enabled = false;
+        }
+        else
+        {
+            MoveButton.enabled = true;
+            RotateLeftButton.enabled = true;
+            RotateRightButton.enabled = true;
+            RepeatButton.enabled = true;
+        }
+    }
+
+    public void BackValue()
+    {
+        ValueText.text = "" + (Convert.ToInt32(ValueText.text) - 1);
+        MoveText.text = "Move " + ValueText.text + " steps";
+        RotateRightText.text = "Rotate " + ValueText.text + " right";
+        RotateLeftText.text = "Rotate " + ValueText.text + " left";
+        RepeatText.text = "Repeat " + ValueText.text + " times";
+        if (Convert.ToInt32(ValueText.text) == 0)
+        {
+            MoveButton.enabled = false;
+            RotateLeftButton.enabled = false;
+            RotateRightButton.enabled = false;
+            RepeatButton.enabled = false;
+        }
+        else if (Convert.ToInt32(ValueText.text) < 0)
+        {
+            MoveButton.enabled = true;
+            RotateLeftButton.enabled = false;
+            RotateRightButton.enabled = false;
+            RepeatButton.enabled = false;
+        }
+        else
+        {
+            MoveButton.enabled = true;
+            RotateLeftButton.enabled = true;
+            RotateRightButton.enabled = true;
+            RepeatButton.enabled = true;
+        }
+    }
+
+    public void GoButton()
+    {
+        string operation;
+        int amount;
+        string XYZ;
+        int amountofchilds = content.childCount;
+        for (int i = 0; i < amountofchilds; i++)
+        {
+            operation = content.GetChild(i).GetChild(1).GetComponent<Text>().text;
+            amount = Convert.ToInt32(content.GetChild(i).GetChild(2).GetComponent<Text>().text);
+            XYZ = content.GetChild(i).GetChild(3).GetComponent<Text>().text;
+            if (operation == "1")
+            {
+                Move(""+amount, XYZ);
+            }
+            else if(operation == "2")
+            {
+                RotateRight(amount);
+            }
+            else if (operation == "3")
+            {
+                RotateLeft(amount);
+            }
+            else if (operation == "4")
+            {
+                int howmuchrepeats = 0;
+                int start = i + 1;
+                int end = i + 2;
+                for(int y = i+1; y < amountofchilds; y++)
+                {
+                    if (content.GetChild(y).GetChild(1).GetComponent<Text>().text == "5" && howmuchrepeats == 0)
+                    {
+                        end = y;
+                        i = y;
+                        //Debug.LogError(y);
+                        break;
+                    }
+                    else if(content.GetChild(y).GetChild(1).GetComponent<Text>().text == "4")
+                    {
+                        howmuchrepeats++;
+                    }
+                    else if (content.GetChild(y).GetChild(1).GetComponent<Text>().text == "5")
+                    {
+                        howmuchrepeats--;
+                    }
+                }
+
+                Repeat(amount, start, end);
+            }
+        }
+    }
+
+    public void Move(string number, string coordinate)
+    {
+        float temp = (float.Parse(number))/10;
+        if (coordinate == "0")
+            cube.transform.Translate(temp, 0, 0);
+        else if(coordinate == "1")
+            cube.transform.Translate(0, temp, 0);
+        else if(coordinate == "2")
+            cube.transform.Translate(0, 0, temp);
+    }
+
+    public void RotateRight(int number)
+    {
+        cube.transform.Rotate(Vector3.up, number);
+    }
+
+    public void RotateLeft(int number)
+    {
+        cube.transform.Rotate(Vector3.up, -number);
+    }
+
+    public void ClearButton()
+    {
+        for(int i = content.GetChildCount(); i > 0; i--) {
+            Destroy(content.GetChild(i-1).gameObject);
+        }
+    }
+
+    public void ResetButton()
+    {
+        cube.transform.localPosition = new Vector3(10f, 2f, 20f);
+        cube.transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+    }
+
+    public void Repeat(int amountinrepeat, int startinrepeat, int endinrepeat)
+    {
+        string operation;
+        int amount;
+        string XYZ;
+        for (int repeats = 0; repeats<amountinrepeat; repeats++)
+        {
+            for (int i = startinrepeat; i < endinrepeat; i++)
+            {
+                //Debug.Log("NumofIIIrepeats" + i);
+                operation = content.GetChild(i).GetChild(1).GetComponent<Text>().text;
+                amount = Convert.ToInt32(content.GetChild(i).GetChild(2).GetComponent<Text>().text);
+                XYZ = content.GetChild(i).GetChild(3).GetComponent<Text>().text;
+
+                if (operation == "1")
+                {
+                    Move("" + amount, XYZ);
+                }
+                else if (operation == "2")
+                {
+                    RotateRight(amount);
+                }
+                else if (operation == "3")
+                {
+                    RotateLeft(amount);
+                }
+                else if (operation == "4")
+                {
+                    int howmuchrepeats = 0;
+                    int start = i + 1;
+                    int end = i + 2;
+                    for (int y = i+1; y < endinrepeat; y++)
+                    {
+                        Debug.LogError(y);
+                        if (content.GetChild(y).GetChild(1).GetComponent<Text>().text == "5" && howmuchrepeats == 0)
+                        {
+                            end = y;
+                            i = y;
+                            Debug.LogError(y);
+                            break;
+                        }
+                        else if (content.GetChild(y).GetChild(1).GetComponent<Text>().text == "4")
+                        {
+                            howmuchrepeats++;
+                        }
+                        else if (content.GetChild(y).GetChild(1).GetComponent<Text>().text == "5")
+                        {
+                            howmuchrepeats--;
+                        }
+                    }
+
+                    Repeat(amount, start, end);
+                }
+            }
+        }
+    }
+}
 ```
-| Обозначение | Описание | Пример регулярного выражения|
-|----:|:----:|:----------|
-| literal | Строка содержит символьный литерал literal | foo |
-| re1&#124;re2 | Строка содержит регулярные выражения `rel` или `re2` | foo&#124;bar |
-```
-**Результат:**
-
-| Обозначение | Описание | Пример регулярного выражения|
-|----:|:----:|:----------|
-| literal | Строка содержит символьный литерал literal | foo |
-| re1&#124;re2 | Строка содержит регулярные выражения `rel` или `re2` | foo&#124;bar |
-
-[:arrow_up:Оглавление](#Оглавление) 
-____
